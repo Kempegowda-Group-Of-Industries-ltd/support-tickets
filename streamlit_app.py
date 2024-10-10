@@ -1,21 +1,18 @@
-import datetime
+import datetime 
 import random
-
 import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-# Set page configuration.
-st.set_page_config(page_title="Support Tickets", page_icon="🎫")
-
-# Show app title and description.
-st.title("🎫 KGI Support Tickets")
+# Set up the page title and description.
+st.set_page_config(page_title="Support Tickets Dashboard", page_icon="🎫", layout="wide")
+st.title("🎫 KGI Support Tickets Dashboard")
 st.write(
     """
-    This app shows how you can build an internal tool in Streamlit. Here, we are 
-    implementing a support ticket workflow. The user can create a ticket, edit 
-    existing tickets, and view some statistics.
+    This app demonstrates a comprehensive support ticket workflow management tool. 
+    You can create, edit, and visualize tickets, as well as analyze performance metrics 
+    with detailed insights.
     """
 )
 
@@ -55,6 +52,7 @@ if "df" not in st.session_state:
     # Save the dataframe in session state for persistence.
     st.session_state.df = df
 
+
 # Section for adding new tickets.
 st.header("📝 Add a new ticket")
 
@@ -89,6 +87,7 @@ if submitted:
     st.write("🎉 Ticket submitted successfully!")
     st.dataframe(df_new, use_container_width=True, hide_index=True)
     st.session_state.df = pd.concat([df_new, st.session_state.df], axis=0)
+
 
 # Section to view and edit tickets.
 st.header("🛠 Manage existing tickets")
@@ -153,5 +152,20 @@ st.altair_chart(status_plot, use_container_width=True)
 st.write("#### Tickets by Assigned Team Member")
 assigned_plot = alt.Chart(st.session_state.df).mark_bar().encode(
     x="Assigned To:N", y="count():Q", color="Assigned To:N"
-).properties(title="Tickets Assigned to Team Members").configure_title(fontSize=18)
+).properties(title="Number of Tickets per Team Member").configure_title(fontSize=18)
 st.altair_chart(assigned_plot, use_container_width=True)
+
+st.write("#### Ticket Resolution Time Distribution")
+resolution_plot = alt.Chart(st.session_state.df).mark_boxplot().encode(
+    x="Resolution Time (hours):Q"
+).properties(title="Resolution Time Distribution").configure_title(fontSize=18)
+st.altair_chart(resolution_plot, use_container_width=True)
+
+# Option to download the ticket data.
+st.header("📂 Export Data")
+st.download_button(
+    label="Download tickets data as CSV",
+    data=st.session_state.df.to_csv(index=False).encode("utf-8"),
+    file_name="support_tickets.csv",
+    mime="text/csv",
+)
