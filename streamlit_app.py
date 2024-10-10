@@ -5,6 +5,13 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
+import datetime
+import random
+
+import altair as alt
+import numpy as np
+import pandas as pd
+import streamlit as st
 
 # Show app title and description.
 st.set_page_config(page_title="Support tickets", page_icon="🎫")
@@ -172,24 +179,8 @@ priority_plot = (
 st.altair_chart(priority_plot, use_container_width=True, theme="streamlit")
 
 
-import datetime
-import random
 
-import altair as alt
-import numpy as np
-import pandas as pd
-import streamlit as st
 
-# Set up the page title and description.
-st.set_page_config(page_title="Support Tickets Dashboard", page_icon="🎫", layout="wide")
-st.title("🎫 KGI Support Tickets Dashboard")
-st.write(
-    """
-    This app demonstrates a comprehensive support ticket workflow management tool. 
-    You can create, edit, and visualize tickets, as well as analyze performance metrics 
-    with detailed insights.
-    """
-)
 
 # Create a random Pandas dataframe with existing tickets if not already present in session.
 if "df" not in st.session_state:
